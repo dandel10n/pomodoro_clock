@@ -1,8 +1,10 @@
 var pomodoroClock = function() {
-  var sessionLength = 25;
+  var sessionLength = 10;
   var breakLength = 5;
+  var sessionTimerId;
+  var breakTimerId;
+  var self = this;
 
-  this.startTimer = function() {};
   this.stopTimer = function() {};
 
   this.sessionMinutePlus = function() {
@@ -28,6 +30,33 @@ var pomodoroClock = function() {
     return breakLength;
   };
 
-  //this.workTimeIsOver = function() {};
-  //this.breakTimeIsOver = function() {};
+  function sessionIntervalHandler(sessionTime) {
+    return function(){
+      console.log('Session:', sessionTime);
+      if (sessionTime == 0) {
+        clearInterval(sessionTimerId);
+        startBreakTimer();
+      }
+      sessionTime--;
+    }
+  };
+
+  function breakIntervalHandler(breakTime) {
+    return function(){
+      console.log('Break:', breakTime);
+      if (breakTime == 0) {
+        clearInterval(breakTimerId);
+        self.startSessionTimer();
+      }
+      breakTime--;
+    }
+  }
+
+  function startBreakTimer() {
+    breakTimerId = setInterval(breakIntervalHandler(breakLength), 1000);
+  }
+
+  this.startSessionTimer = function() {
+    sessionTimerId = setInterval(sessionIntervalHandler(sessionLength), 1000);
+  }
 }

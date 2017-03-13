@@ -1,6 +1,10 @@
 $(document).ready(function() {
   var clock = new pomodoroClock();
 
+  $("#pomodoroClock .clock").click(function() {
+    clock.startSessionTimer();
+  });
+
   $('#pomodoroClock .sessionMinus').click(function() {
     clock.sessionMinuteMinus();
     $(".sessionLength").text(clock.getSessionLength());
@@ -20,4 +24,5 @@ $(document).ready(function() {
     clock.breakMinutePlus();
     $(".breakLength").text(clock.getBreakLength());
   });
+
 })
