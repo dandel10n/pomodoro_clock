@@ -1,8 +1,10 @@
 $(document).ready(function() {
   var clock = new pomodoroClock();
 
+  $('.timer').html(clock.sessionMinutes + ":00");
+
   $("#pomodoroClock .clock").click(function() {
-    clock.startSessionTimer();
+    clock.pause();
   });
 
   $('#pomodoroClock .sessionMinus').click(function() {

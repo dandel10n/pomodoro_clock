@@ -1,9 +1,15 @@
 var pomodoroClock = function() {
+
   var sessionLength = 10;
   var breakLength = 5;
-  var sessionTimerId;
-  var breakTimerId;
+  var sessionTimerId = null;
+  var breakTimerId = null;
   var self = this;
+
+  var nowIsRunning = null;
+
+  this.sessionMinutes = 10;
+  this.breakMinutes = 5;
 
   this.stopTimer = function() {};
 
@@ -30,33 +36,57 @@ var pomodoroClock = function() {
     return breakLength;
   };
 
-  function sessionIntervalHandler(sessionTime) {
-    return function(){
-      console.log('Session:', sessionTime);
-      if (sessionTime == 0) {
-        clearInterval(sessionTimerId);
-        startBreakTimer();
-      }
-      sessionTime--;
+  function sessionIntervalHandler() {
+    console.log('Session:', sessionLength);
+    if (sessionLength == 0) {
+      clearInterval(sessionTimerId);
+      sessionTimerId = null;
+      startBreakTimer();
     }
+    sessionLength--;
   };
 
-  function breakIntervalHandler(breakTime) {
-    return function(){
-      console.log('Break:', breakTime);
-      if (breakTime == 0) {
-        clearInterval(breakTimerId);
-        self.startSessionTimer();
-      }
-      breakTime--;
+  function breakIntervalHandler() {
+    console.log('Break:', breakLength);
+    if (breakLength == 0) {
+      clearInterval(breakTimerId);
+      breakTimerId = null;
+      startSessionTimer();
     }
+    breakLength--;
   }
 
   function startBreakTimer() {
-    breakTimerId = setInterval(breakIntervalHandler(breakLength), 1000);
+    nowIsRunning = "break";
+    breakLength = self.breakMinutes;
+    breakTimerId = setInterval(breakIntervalHandler, 1000);
   }
 
-  this.startSessionTimer = function() {
-    sessionTimerId = setInterval(sessionIntervalHandler(sessionLength), 1000);
+  function startSessionTimer() {
+    nowIsRunning = "session";
+    sessionLength = self.sessionMinutes;
+    sessionTimerId = setInterval(sessionIntervalHandler, 1000);
+  }
+
+  /*запускается при нажатии на часы*/
+  this.pause = function() {
+    /*если оба таймера останослены(не важно на паузе или еще не запускались)*/
+    if (breakTimerId === null && sessionTimerId === null) {
+      /*была остановлена сессия или не шло ничего(первый запуск)*/
+      if (nowIsRunning === null || nowIsRunning === "session") {
+        sessionTimerId = setInterval(sessionIntervalHandler, 1000);
+      /*был остановлен перерыв*/
+      } else if (nowIsRunning === "break") {
+        breakTimerId = setInterval(breakIntervalHandler, 1000);
+      }
+    /*если сейчас идет сессия*/
+    } else if (breakTimerId === null && sessionTimerId !== null) {
+      clearInterval(sessionTimerId);
+      sessionTimerId = null;
+    /*если сейчас идет перерыв*/
+    } else if (breakTimerId !== null && sessionTimerId === null) {
+      clearInterval(breakTimerId);
+      breakTimerId = null;
+    }
   }
 }
