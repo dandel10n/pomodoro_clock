@@ -4,7 +4,7 @@ $(document).ready(function() {
   $('.timer').html(clock.sessionMinutes + ":00");
 
   $("#pomodoroClock .clock").click(function() {
-    clock.pause();
+    clock.startAndPause();
   });
 
   $('#pomodoroClock .sessionMinus').click(function() {
@@ -27,4 +27,14 @@ $(document).ready(function() {
     $(".breakLength").text(clock.getBreakLength());
   });
 
+  function sessionTimeRendering(seconds) {
+    console.log("Session Rendering", seconds);
+  }
+
+  function breakTimeRendering(seconds) {
+    console.log("Break Rendering", seconds);
+  }
+
+  clock.setSessionTimeCallback(sessionTimeRendering);
+  clock.setBreakTimeCallback(breakTimeRendering);
 })
