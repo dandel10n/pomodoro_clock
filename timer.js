@@ -1,31 +1,28 @@
-var pomodoroClock = function() {
+var pomodoroClock = function(sessionLength, breakLength) {
 
-  var sessionLength = 10;
-  var breakLength = 5;
   var sessionTimerId = null;
   var breakTimerId = null;
   var self = this;
   var sessionCallback;
   var breakCallback;
   var nowIsRunning = null;
-
-  this.sessionMinutes = 10;
-  this.breakMinutes = 5;
+  var temporarySessionLength;
+  var temporaryBreakLength;
 
   this.sessionMinutePlus = function() {
-    sessionLength += 1;
+    sessionLength += 60;
   };
 
   this.sessionMinuteMinus = function() {
-    sessionLength -= 1;
+    sessionLength -= 60;
   };
 
   this.breakMinutePlus = function() {
-    breakLength += 1;
+    breakLength += 60;
   };
 
   this.breakMinuteMinus = function() {
-    breakLength -= 1;
+    breakLength -= 60;
   };
 
   this.getSessionLength = function() {
@@ -48,8 +45,11 @@ var pomodoroClock = function() {
   this.startAndPause = function() {
     /*если оба таймера останослены(не важно на паузе или еще не запускались)*/
     if (breakTimerId === null && sessionTimerId === null) {
-      /*была остановлена сессия или не шло ничего(первый запуск)*/
-      if (nowIsRunning === null || nowIsRunning === "session") {
+      /*первый запуск*/
+      if (nowIsRunning === null) {
+        startSessionTimer();
+      /*была остановлена сессия*/
+      } else if (nowIsRunning === "session") {
         sessionTimerId = setInterval(sessionIntervalHandler, 1000);
       /*был остановлен перерыв*/
       } else if (nowIsRunning === "break") {
@@ -67,34 +67,34 @@ var pomodoroClock = function() {
   }
 
   function sessionIntervalHandler() {
-    sessionCallback(sessionLength);
-    if (sessionLength == 0) {
+    sessionCallback(temporarySessionLength);
+    if (temporarySessionLength == 0) {
       clearInterval(sessionTimerId);
       sessionTimerId = null;
       startBreakTimer();
     }
-    sessionLength--;
+    temporarySessionLength--;
   };
 
   function breakIntervalHandler() {
-    breakCallback(breakLength);
-    if (breakLength == 0) {
+    breakCallback(temporaryBreakLength);
+    if (temporaryBreakLength == 0) {
       clearInterval(breakTimerId);
       breakTimerId = null;
       startSessionTimer();
     }
-    breakLength--;
+    temporaryBreakLength--;
   }
 
   function startBreakTimer() {
     nowIsRunning = "break";
-    breakLength = self.breakMinutes;
+    temporaryBreakLength = breakLength;
     breakTimerId = setInterval(breakIntervalHandler, 1000);
   }
 
   function startSessionTimer() {
     nowIsRunning = "session";
-    sessionLength = self.sessionMinutes;
+    temporarySessionLength = sessionLength;
     sessionTimerId = setInterval(sessionIntervalHandler, 1000);
   }
 }
