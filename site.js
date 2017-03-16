@@ -1,12 +1,9 @@
 $(document).ready(function() {
   var clock = new pomodoroClock(10, 5);
 
-  var minutes;
-
-  $('.timer').html("timer");
-
   $("#pomodoroClock .clock").click(function() {
     clock.startAndPause();
+    $(".button").prop("disabled", !$(".button").prop("disabled"));
   });
 
   $('#pomodoroClock .sessionMinus').click(function() {
@@ -30,11 +27,13 @@ $(document).ready(function() {
   });
 
   function sessionTimeRendering(seconds) {
-    console.log("Session Rendering", new Date(seconds*1000).toUTCString().split(/ /)[4].slice(3));
+    $(".title").text("Session");
+    $(".timer").text(new Date(seconds*1000).toUTCString().split(/ /)[4].slice(3));
   }
 
   function breakTimeRendering(seconds) {
-    console.log("Break Rendering", new Date(seconds*1000).toUTCString().split(/ /)[4].slice(3));
+    $(".title").text("Break");
+    $(".timer").text(new Date(seconds*1000).toUTCString().split(/ /)[4].slice(3));
 
   }
 
