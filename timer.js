@@ -10,19 +10,33 @@ var pomodoroClock = function(sessionLength, breakLength) {
   var temporaryBreakLength;
 
   this.sessionMinutePlus = function() {
-    sessionLength += 60;
+    sessionLength += 1;
+    if (nowIsRunning === "session") {
+      temporarySessionLength = sessionLength;
+    }
   };
 
   this.sessionMinuteMinus = function() {
-    sessionLength -= 60;
+    sessionLength -= 1;
+    //если была остановлена сессия
+    if (nowIsRunning === "session") {
+      temporarySessionLength = sessionLength;
+    }
   };
 
   this.breakMinutePlus = function() {
-    breakLength += 60;
+    breakLength += 1;
+    //если было остановлено время брейка
+    if (nowIsRunning === "break") {
+      temporaryBreakLength = breakLength;
+    }
   };
 
   this.breakMinuteMinus = function() {
-    breakLength -= 60;
+    breakLength -= 1;
+    if (nowIsRunning === "break") {
+      temporaryBreakLength = breakLength;
+    }
   };
 
   this.getSessionLength = function() {
@@ -43,7 +57,7 @@ var pomodoroClock = function(sessionLength, breakLength) {
 
   /*запускается при нажатии на часы*/
   this.startAndPause = function() {
-    /*если оба таймера останослены(не важно на паузе или еще не запускались)*/
+    /*если оба таймера останослены(на паузе или еще не запускались)*/
     if (breakTimerId === null && sessionTimerId === null) {
       /*первый запуск*/
       if (nowIsRunning === null) {
