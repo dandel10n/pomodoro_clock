@@ -5,13 +5,13 @@ var pomodoroClock = function(sessionLength, breakLength) {
   var self = this;
   var sessionCallback;
   var breakCallback;
-  var nowIsRunning = null;
+  var currentTimerType = null;
   var temporarySessionLength;
   var temporaryBreakLength;
 
   this.sessionMinutePlus = function() {
     sessionLength += 60;
-    if (nowIsRunning === "session") {
+    if (currentTimerType === "session") {
       temporarySessionLength = sessionLength;
     }
   };
@@ -19,7 +19,7 @@ var pomodoroClock = function(sessionLength, breakLength) {
   this.sessionMinuteMinus = function() {
     sessionLength -= 60;
     //если была остановлена сессия
-    if (nowIsRunning === "session") {
+    if (currentTimerType === "session") {
       temporarySessionLength = sessionLength;
     }
   };
@@ -27,14 +27,14 @@ var pomodoroClock = function(sessionLength, breakLength) {
   this.breakMinutePlus = function() {
     breakLength += 60;
     //если было остановлено время брейка
-    if (nowIsRunning === "break") {
+    if (currentTimerType === "break") {
       temporaryBreakLength = breakLength;
     }
   };
 
   this.breakMinuteMinus = function() {
     breakLength -= 60;
-    if (nowIsRunning === "break") {
+    if (currentTimerType === "break") {
       temporaryBreakLength = breakLength;
     }
   };
@@ -48,13 +48,7 @@ var pomodoroClock = function(sessionLength, breakLength) {
   };
 
   this.getCurrentTimerType = function() {
-    if (nowIsRunning === "break") {
-      return "break";
-    } else if (nowIsRunning === "session") {
-      return "session";
-    } else {
-      return null;
-    }
+    return currentTimerType;
   }
 
   this.setSessionTimeCallback = function(callback) {
@@ -70,13 +64,13 @@ var pomodoroClock = function(sessionLength, breakLength) {
     /*если оба таймера останослены(на паузе или еще не запускались)*/
     if (breakTimerId === null && sessionTimerId === null) {
       /*первый запуск*/
-      if (nowIsRunning === null) {
+      if (currentTimerType === null) {
         startSessionTimer();
       /*была остановлена сессия*/
-      } else if (nowIsRunning === "session") {
+      } else if (currentTimerType === "session") {
         sessionTimerId = setInterval(sessionIntervalHandler, 1000);
       /*был остановлен перерыв*/
-      } else if (nowIsRunning === "break") {
+      } else if (currentTimerType === "break") {
         breakTimerId = setInterval(breakIntervalHandler, 1000);
       }
     /*если сейчас идет сессия*/
@@ -111,13 +105,13 @@ var pomodoroClock = function(sessionLength, breakLength) {
   }
 
   function startBreakTimer() {
-    nowIsRunning = "break";
+    currentTimerType = "break";
     temporaryBreakLength = breakLength;
     breakTimerId = setInterval(breakIntervalHandler, 1000);
   }
 
   function startSessionTimer() {
-    nowIsRunning = "session";
+    currentTimerType = "session";
     temporarySessionLength = sessionLength;
     sessionTimerId = setInterval(sessionIntervalHandler, 1000);
   }
