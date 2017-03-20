@@ -55,6 +55,7 @@ body {
     font-size: 24px;
     min-height: 100%;
     height: 100%;
+    color: #000066;
 }
 
 *,
@@ -63,4 +64,87 @@ body {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+}
+
+
+.clock{
+    height: 250px;
+    width: 250px;
+    margin: 20px auto;
+    border: 2px solid  #000066;
+    border-radius: 100%;
+    cursor: pointer;
+    background-color: #fff;
+    color: #003366;
+    padding-top: 75px;
+    position: relative;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.clock:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.clock .complite {
+    content: '';
+    position: absolute;
+    background: yellow;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: -1;
+    height: 50%;
+}
+
+h1{
+    font-size: 60px;
+    display: block;
+    margin: 30px 0;
+}
+
+.minutes {
+    display: inline-block;
+    margin: 20px;
+}
+
+.timerTitle {
+    font-size: 16px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.button {
+    height: 20px;
+    width: 25px;
+    font-size: 18px;
+    color: #003366;
+    border: 0;
+    background-color: transparent;
+    display: inline-block;
+}
+
+.breakLength,
+.sessionLength {
+    display: inline-block;
+}
+
+button {
+    outline: none;
+}
+
+button:hover{
+    cursor: pointer;
+}
+
+.title,
+.timer {
+    font-size: 50px;
 }
