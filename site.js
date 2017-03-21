@@ -45,11 +45,14 @@ $(document).ready(function() {
   function sessionTimeRendering(seconds) {
     $(".title").text("Session");
     $(".timer").text(formateSecondsintoTimer(seconds));
+    $(".complite").css("height", 100 - seconds/clock.getSessionLength()*100 + "%");
   }
 
   function breakTimeRendering(seconds) {
     $(".title").text("Break");
     $(".timer").text(formateSecondsintoTimer(seconds));
+    $(".complite").css("backgroundColor", "#ccff99")
+    $(".complite").css("height", 100 - seconds/clock.getBreakLength()*100 + "%");
   }
 
   function formateSecondsintoTimer(seconds) {
