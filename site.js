@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  var clock = new pomodoroClock(600, 300);
+  var clock = new pomodoroClock(1500, 300);
 
   $("#pomodoroClock .clock").click(function() {
     clock.startAndPause();

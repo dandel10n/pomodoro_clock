@@ -2,7 +2,6 @@ var pomodoroClock = function(sessionLength, breakLength) {
 
   var sessionTimerId = null;
   var breakTimerId = null;
-  var self = this;
   var sessionCallback;
   var breakCallback;
   var currentTimerType = null;
@@ -17,7 +16,11 @@ var pomodoroClock = function(sessionLength, breakLength) {
   };
 
   this.sessionMinuteMinus = function() {
-    sessionLength -= 60;
+    if (sessionLength > 60) {
+      sessionLength -= 60;
+    } else {
+      sessionLength = 60;
+    }
     //если была остановлена сессия
     if (currentTimerType === "session") {
       temporarySessionLength = sessionLength;
@@ -33,7 +36,11 @@ var pomodoroClock = function(sessionLength, breakLength) {
   };
 
   this.breakMinuteMinus = function() {
-    breakLength -= 60;
+    if (breakLength > 60) {
+      breakLength -= 60;
+    } else {
+      breakLength = 60;
+    }
     if (currentTimerType === "break") {
       temporaryBreakLength = breakLength;
     }
