@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  var audio = $("audio")[0];
   var clock = new PomodoroClock(1500, 300);
 
   $("#pomodoroClock .clock").click(function() {
@@ -43,12 +44,18 @@ $(document).ready(function() {
   }
 
   function sessionTimeRendering(seconds) {
+    if (seconds == 1) {
+      audio.play();
+    };
     $(".title").text("Session");
     $(".timer").text(formateSecondsintoTimer(seconds));
     $(".complite").css("height", 100 - seconds/clock.getSessionLength()*100 + "%");
   }
 
   function breakTimeRendering(seconds) {
+    if (seconds == 1) {
+      audio.play();
+    };
     $(".title").text("Break");
     $(".timer").text(formateSecondsintoTimer(seconds));
     $(".complite").css("backgroundColor", "#ccff99")
